@@ -65,20 +65,8 @@ define(['N/redirect','N/search','N/record'],
                             'custrecord_my_e_inv_brn',
                             'custrecord_my_e_inv_tin_validstatus'
                         ],
-                        filters: ['isinactive', 'is', 'F'],
+                        filters: []
                     }).run().getRange(0, 1000);
-
-                    var subsidiaries = [];
-
-                    for (var i = 0; i < configSetupSearch.length; i++) {
-                        subsidiaries.push(
-                            configSetupSearch[i].getValue("custrecord_my_e_invoice_subsidiary")
-                        );
-                    }
-                    subsidiaries = JSON.stringify(subsidiaries);
-
-                    log.debug("subsidiaries", subsidiaries);
-
                     //get document status deployment creation for new subsidiary
                     var initialGetStatusDeploymentSearch  = search.create({
                         type: "scriptdeployment",
@@ -122,17 +110,32 @@ define(['N/redirect','N/search','N/record'],
                         ]
                     }).run().getRange(0,1);
 
-                    if(configSetupSearch.length > 0){
+                    if(configSetupSearch.length == 1){
                         var initialStatusScriptRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:initialGetStatusDeploymentSearch[0].getValue("internalid")});
-                        initialStatusScriptRec.setValue("custscript_einv_status_subsidiary", subsidiaries);
+                        initialStatusScriptRec.setValue("custscript_einv_status_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
                         initialStatusScriptRec.save();
 
                         var inProgressStatusDeploymentRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:inProgressStatusDeploymentSearch[0].getValue("internalid")});
-                        inProgressStatusDeploymentRec.setValue("custscript_einv_status_subsidiary", subsidiaries);
+                        inProgressStatusDeploymentRec.setValue("custscript_einv_status_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
                         inProgressStatusDeploymentRec.save();
 
                         var submittedStatusDeploymentRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:submittedStatusDeploymentSearch[0].getValue("internalid")});
-                        submittedStatusDeploymentRec.setValue("custscript_einv_status_subsidiary", subsidiaries);
+                        submittedStatusDeploymentRec.setValue("custscript_einv_status_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        submittedStatusDeploymentRec.save();
+                    }else {
+                        var initialStatusScriptRec = record.copy({type:record.Type.SCRIPT_DEPLOYMENT,id:initialGetStatusDeploymentSearch[0].getValue("internalid")});
+                        initialStatusScriptRec.setValue("custscript_einv_status_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        initialStatusScriptRec.setValue("status","NOTSCHEDULED");
+                        initialStatusScriptRec.save();
+
+                        var inProgressStatusDeploymentRec = record.copy({type:record.Type.SCRIPT_DEPLOYMENT,id:inProgressStatusDeploymentSearch[0].getValue("internalid")});
+                        inProgressStatusDeploymentRec.setValue("custscript_einv_status_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        inProgressStatusDeploymentRec.setValue("status","NOTSCHEDULED");
+                        inProgressStatusDeploymentRec.save();
+
+                        var submittedStatusDeploymentRec = record.copy({type:record.Type.SCRIPT_DEPLOYMENT,id:submittedStatusDeploymentSearch[0].getValue("internalid")});
+                        submittedStatusDeploymentRec.setValue("custscript_einv_status_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        submittedStatusDeploymentRec.setValue("status","NOTSCHEDULED");
                         submittedStatusDeploymentRec.save();
                     }
 
@@ -254,40 +257,77 @@ define(['N/redirect','N/search','N/record'],
                     }).run().getRange(0,1);
 
 
-                    if(configSetupSearch.length > 0){
+                    if(configSetupSearch.length == 1){
                         var submitINVDeploymentRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:submitINVDeploymentSearch[0].getValue("internalid")});
-                        submitINVDeploymentRec.setValue("custscript_einv_submit_subsidiary", subsidiaries);
+                        submitINVDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
                         submitINVDeploymentRec.save();
 
                         var submitDNDeploymentRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:submitDNDeploymentSearch[0].getValue("internalid")});
-                        submitDNDeploymentRec.setValue("custscript_einv_submit_subsidiary", subsidiaries);
+                        submitDNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
                         submitDNDeploymentRec.save();
 
                         var submitCNDeploymentRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:submitCNDeploymentSearch[0].getValue("internalid")});
-                        submitCNDeploymentRec.setValue("custscript_einv_submit_subsidiary", subsidiaries);
+                        submitCNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
                         submitCNDeploymentRec.save();
 
                         var submitSBIDeploymentRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:submitSBIDeploymentSearch[0].getValue("internalid")});
-                        submitSBIDeploymentRec.setValue("custscript_einv_submit_subsidiary", subsidiaries);
+                        submitSBIDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
                         submitSBIDeploymentRec.save();
 
                         var submitRFNDeploymentRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:submitRFNDeploymentSearch[0].getValue("internalid")});
-                        submitRFNDeploymentRec.setValue("custscript_einv_submit_subsidiary", subsidiaries);
+                        submitRFNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
                         submitRFNDeploymentRec.save();
 
                         var submitSBCNDeploymentRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:submitSBCNDeploymentSearch[0].getValue("internalid")});
-                        submitSBCNDeploymentRec.setValue("custscript_einv_submit_subsidiary", subsidiaries);
+                        submitSBCNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
                         submitSBCNDeploymentRec.save();
 
                         var submitSBDNDeploymentRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:submitSBDNDeploymentSearch[0].getValue("internalid")});
-                        submitSBDNDeploymentRec.setValue("custscript_einv_submit_subsidiary", subsidiaries);
+                        submitSBDNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
                         submitSBDNDeploymentRec.save();
 
-                        var submitSBRFNDeploymentRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:submitSBRFNDeploymentSearch[0].getValue("internalid")});
-                        submitSBRFNDeploymentRec.setValue("custscript_einv_submit_subsidiary", subsidiaries);
+                        var submitSBRFNDeploymentRec = record.load({type:record.Type.SCRIPT_DEPLOYMENT,id:submitSBDNDeploymentSearch[0].getValue("internalid")});
+                        submitSBRFNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
                         submitSBRFNDeploymentRec.save();
 
+                    }else {
+                        var submitINVDeploymentRec = record.copy({type:record.Type.SCRIPT_DEPLOYMENT,id:submitINVDeploymentSearch[0].getValue("internalid")});
+                        submitINVDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        submitINVDeploymentRec.setValue("status","NOTSCHEDULED");
+                        submitINVDeploymentRec.save();
+
+                        var submitDNDeploymentRec = record.copy({type:record.Type.SCRIPT_DEPLOYMENT,id:submitDNDeploymentSearch[0].getValue("internalid")});
+                        submitDNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        submitDNDeploymentRec.setValue("status","NOTSCHEDULED");
+                        submitDNDeploymentRec.save();
+
+                        var submitCNDeploymentRec = record.copy({type:record.Type.SCRIPT_DEPLOYMENT,id:submitCNDeploymentSearch[0].getValue("internalid")});
+                        submitCNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        submitCNDeploymentRec.setValue("status","NOTSCHEDULED");
+                        submitCNDeploymentRec.save();
+
+                        var submitSBIDeploymentRec = record.copy({type:record.Type.SCRIPT_DEPLOYMENT,id:submitSBIDeploymentSearch[0].getValue("internalid")});
+                        submitSBIDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        submitSBIDeploymentRec.setValue("status","NOTSCHEDULED");
+                        submitSBIDeploymentRec.save();
+
+                        var submitRFNDeploymentRec = record.copy({type:record.Type.SCRIPT_DEPLOYMENT,id:submitRFNDeploymentSearch[0].getValue("internalid")});
+                        submitRFNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        submitRFNDeploymentRec.save();
+
+                        var submitSBCNDeploymentRec = record.copy({type:record.Type.SCRIPT_DEPLOYMENT,id:submitSBCNDeploymentSearch[0].getValue("internalid")});
+                        submitSBCNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        submitSBCNDeploymentRec.save();
+
+                        var submitSBDNDeploymentRec = record.copy({type:record.Type.SCRIPT_DEPLOYMENT,id:submitSBDNDeploymentSearch[0].getValue("internalid")});
+                        submitSBDNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        submitSBDNDeploymentRec.save();
+
+                        var submitSBRFNDeploymentRec = record.copy({type:record.Type.SCRIPT_DEPLOYMENT,id:submitSBDNDeploymentSearch[0].getValue("internalid")});
+                        submitSBRFNDeploymentRec.setValue("custscript_einv_submit_subsidiary",context.newRecord.getValue("custrecord_my_e_invoice_subsidiary"));
+                        submitSBRFNDeploymentRec.save();
                     }
+
                 }
 
             } catch (ex) {
@@ -314,25 +354,18 @@ define(['N/redirect','N/search','N/record'],
                         ["custrecord_my_e_invoice_subsidiary", "anyof", context.newRecord.getValue("custrecord_my_e_invoice_subsidiary")]
                     ]
                 }).run().getRange(0, 1000);
-                if (configSetupSearch.length > 0) {
+                if (configSetupSearch.length > 1) {
                     throw {
                         name: "DUPLICATE_SUBSIDIARY_CONFIG_NOT_ALLOWED",
                         message: "Duplicate subsidiary not allowed to setup connection."
                     }
                 }
 
-                var totalConnections = search.create({
-                    type: 'customrecord_my_einv_con_setup',
-                    filters: [
-                        ["isinactive","is","F"]
-                    ]
-                }).runPaged().count;
-
-                if (totalConnections >= 100) {
+                if (configSetupSearch.length == 50) {
                     throw {
-                        name: "ONLY_100_SUBSIDIARIES_ARE_ALLOWED",
-                        message: "You cannot add more than 100 subsidiaries to the connection."
-                    };
+                        name: "ONLY_50_SUBSIDIARYS_ARE_ALLOWED",
+                        message: "You cannot add more than 50 subsidiaries to the connection."
+                    }
                 }
             }
         }
