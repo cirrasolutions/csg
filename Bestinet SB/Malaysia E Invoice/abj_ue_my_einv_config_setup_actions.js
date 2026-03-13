@@ -8,7 +8,7 @@
 /**
  * @NApiVersion 2.1
  * @NScriptType UserEventScript
- * Task          Date                Author                                         Remarks
+ * Task          Date                Author                                        Remarks
  * doc status  04/07/2024      sayyad@abjcloudsolutions.com    
  */
 define(['N/redirect','N/search','N/record'],
