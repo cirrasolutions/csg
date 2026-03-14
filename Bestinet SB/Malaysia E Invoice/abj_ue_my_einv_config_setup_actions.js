@@ -1,16 +1,7 @@
-/***************************************************************************************
- ** Copyright (c) 2020 ABJ Cloud Solutions, Inc.
- ** A1-13-2 Arcoris Business Suite, 10, Jalan Kiara, Mont Kiara, 50480 Kuala Lumpur, Malaysia
- ** All Rights Reserved.
- ** This software is the confidential and proprietary information of ABJ Cloud Solutions. ("Confidential Information").
- ** You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement you entered into with ABJ Cloud Solutions.                   
- ***************************************************************************************/
 /**
  * @NApiVersion 2.1
  * @NScriptType UserEventScript
- * Task          Date                Author                                         Remarks
- * doc status  04/07/2024      sayyad@abjcloudsolutions.com    
- */
+ **/
 define(['N/redirect','N/search','N/record'],
 
     function (redirect, search, record) {
